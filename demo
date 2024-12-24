@@ -1,0 +1,109 @@
+ER Diagram Overview
+This diagram will show the key entities involved: Users, Admin (Brand), Routines, Progress, and how they relate to each other.
+
+Here’s a textual representation of how we can visualize the entities and their relationships:
+
+Entities:
+User:
+
+Attributes: userId, name, email, password, age, gender, preferences (e.g., fitness, wellness), createdAt
+Relations: A User can start multiple Routines. They track their Progress for each Routine.
+Admin (Brand):
+
+Attributes: adminId, email, password
+Relations: An Admin can create and manage Routines.
+Routine:
+
+Attributes: routineId, name, duration, steps (e.g., instructions like "apply almond oil"), milestones, benefits, createdBy (adminId)
+Relations: A Routine can have multiple Progress records (one for each User), and it is created by an Admin.
+Progress:
+
+Attributes: progressId, userId, routineId, completedWeeks (e.g., [1, 2, 3]), achievedBenefits (e.g., "Week 1: Improved hydration"), remindersSent, lastUpdated
+Relations: A Progress record is specific to a User and a Routine. It tracks how many weeks have been completed and the benefits achieved.
+ER Diagram (Textual Representation)
+sql
+Copy code
+    +-----------------+        +----------------+        +------------------+
+    |     Admin       |        |    User        |        |     Routine      |
+    |-----------------|        |----------------|        |------------------|
+    | adminId (PK)    |        | userId (PK)    |        | routineId (PK)   |
+    | email           |        | name           |        | name             |
+    | password        |        | email          |        | duration         |
+    +-----------------+        | password       |        | steps            |
+          |                   | age            |        | milestones       |
+          |                   | gender         |        | benefits         |
+    +---------------------+   | preferences    |        | createdBy (FK)   |
+    |    Creates Routine   |   | createdAt      |        +------------------+
+    +---------------------+   +----------------+
+           |                       |         |
+           v                       v         |
+      +------------------+    +------------------+
+      |     Progress     |    |   User_Routine   |
+      |------------------|    |------------------|
+      | progressId (PK)  |    | userId (FK)      |
+      | userId (FK)      |    | routineId (FK)   |
+      | routineId (FK)   |    +------------------+
+      | completedWeeks   |         |
+      | achievedBenefits |         |
+      | remindersSent    |         |
+      | lastUpdated      |         |
+      +------------------+         |
+                                   v
+                           +------------------+
+                           |   Routine Steps  |
+                           |------------------|
+                           | stepId (PK)      |
+                           | routineId (FK)   |
+                           | description      |
+                           +------------------+
+Explanation:
+Admin can create routines and manage them.
+
+Admin adds routines (e.g., "8-week Hair Care Routine").
+Admin also creates steps for each routine (e.g., "Apply shampoo", "Apply conditioner", etc.) and defines milestones and benefits (e.g., "Week 1: Improved scalp health").
+User can:
+
+Start a routine: Users can start routines created by Admin (brands).
+Track progress: Users can see their progress and how many weeks they’ve completed, along with the benefits they have achieved.
+Complete weekly steps: As users progress through the routine, they mark weeks as completed.
+Receive reminders: The app will send reminders to users to stay on track with their routine and milestones.
+Routine contains the details of what a user needs to follow for each week.
+
+Each Routine has a specific duration (e.g., 8 weeks) and multiple steps. The steps could include actions beyond product usage (e.g., "Apply almond oil after wash").
+Routine also has milestones and weekly benefits to encourage users.
+Progress is tracked for each User on a specific Routine.
+
+Progress stores details about which weeks the user has completed, the benefits achieved (e.g., "Week 1: Hydration"), and whether reminders have been sent.
+Admin (Brand) Role:
+Can create, update, and delete routines.
+Can view all routines created by them.
+Can manage steps and benefits for each routine.
+Provides analytics on routine engagement (e.g., number of completions).
+User Role:
+Can view and start routines.
+Can track progress (week-by-week milestones and benefits).
+Can receive reminders and notifications for completing steps and milestones.
+Can mark progress (e.g., Week 1 completed, benefits achieved).
+What Each Code Does:
+Routine Controller (Admin side):
+Allows the Admin to create, update, delete, and view routines.
+Allows the Admin to manage routine steps and weekly benefits.
+Progress Controller (User side):
+Allows the User to start a routine.
+Allows the User to update progress by completing weeks.
+Allows the User to view progress for each routine.
+Database Relations:
+A User can have multiple Progress records (one for each Routine they are following).
+A Routine can have multiple Progress records (one for each User enrolled in it).
+Workflow for Admin:
+Admin creates routines with steps, benefits, and milestones.
+Admin can view all routines and analyze routine engagement.
+Workflow for User:
+User logs in and chooses a routine to start.
+User tracks progress, marks weeks as completed, and sees weekly benefits.
+User receives reminders to complete steps for the routine.
+Summary:
+Admin has control over creating and managing routines, steps, and benefits.
+User interacts with routines, tracks their progress, and receives reminders for completion.
+Progress stores the completion status for users on each routine.
+If you need further clarification or adjustments, feel free to ask!
